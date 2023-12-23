@@ -1,0 +1,7 @@
+202035751:Eduardo,Ayuso,FADCOM,Diseño,8.75,5,0
+202101471:Esteban,Pulley,FCNM,Matemáticas,8.36,6,0
+202216358:Emiracio,Gonzalez,FIEC,Computacion,7.56,5,1
+202045983:Ezreal,Gonzalez,FSCH,Economía,8.32,6,0
+201905478:Jenniffer,Chica,FSCH,Economía,9.32,5,0
+201904328:Lenin,Moreno,FCSH,Economía,9.16,6,0
+202045795:Carlos,Gonzalez,FCSH,Contabilidad,8.54,6,1

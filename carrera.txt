@@ -1,0 +1,5 @@
+Computación-C001
+Matemáticas-C002
+Diseño-C003
+Economía-C004
+Contabilidad-C005
