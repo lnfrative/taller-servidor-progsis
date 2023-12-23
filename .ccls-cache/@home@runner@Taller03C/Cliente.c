@@ -1,68 +1,49 @@
-/*************************************************************************************/
-/* @file    client_1.c                                                               */
-/* @brief   This clients connects,                                                   */
-/*          sends a text, reads what server and disconnects                          */
-/*************************************************************************************/
+#include <stdio.h>
+#include <Socket_Cliente.h>
+#include <Socket.h>
 
-#include <netdb.h> 
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <string.h> 
-#include <sys/socket.h> 
-#include <unistd.h>
-#include <netinet/in.h>
-#include <arpa/inet.h> 
-#include <unistd.h>
+main ()
+{
+	/*
+	* Descriptor del socket y buffer para datos
+	*/
+	int Socket_Con_Servidor;
+	char Cadena[100];
 
-#define SERVER_ADDRESS  "192.168.0.21"     /* server IP */
-#define PORT            8080 
+	/*
+	* Se abre la conexion con el servidor, pasando el nombre del ordenador
+	* y el servicio solicitado.
+	* "localhost" corresponde al nombre del mismo ordenador en el que
+	* estamos corriendo. Esta dado de alta en /etc/hosts
+	* "cpp_java" es un servicio dado de alta en /etc/services
+	*/
+	Socket_Con_Servidor = Abre_Conexion_Inet ("localhost", "cpp_java");
+	if (Socket_Con_Servidor == 1)
+	{
+		printf ("No puedo establecer conexion con el servidor\n");
+		exit (-1);
+	}
 
-/* Test sequences */
-char buf_tx[] = "Hello server. I am a client";      
-char buf_rx[100];                     /* receive buffer */
- 
- 
-/* This clients connects, sends a text and disconnects */
-int main() 
-{ 
-    int sockfd; 
-    struct sockaddr_in servaddr; 
-    
-    /* Socket creation */
-    sockfd = socket(AF_INET, SOCK_STREAM, 0); 
-    if (sockfd == -1) 
-    { 
-        printf("CLIENT: socket creation failed...\n"); 
-        return -1;  
-    } 
-    else
-    {
-        printf("CLIENT: Socket successfully created..\n"); 
-    }
-    
-    
-    memset(&servaddr, 0, sizeof(servaddr));
+	/*
+	* Se prepara una cadena con 5 caracteres y se envia, 4 letras mas
+	* el \0 que indica fin de cadena en C
+	*/
+	strcpy (Cadena, "Hola");
+	Escribe_Socket (Socket_Con_Servidor, Cadena, 5);
 
-    /* assign IP, PORT */
-    servaddr.sin_family = AF_INET; 
-    servaddr.sin_addr.s_addr = inet_addr( SERVER_ADDRESS ); 
-    servaddr.sin_port = htons(PORT); 
-  
-    /* try to connect the client socket to server socket */
-    if (connect(sockfd, (struct sockaddr*)&servaddr, sizeof(servaddr)) != 0) 
-    { 
-        printf("connection with the server failed...\n");  
-        return -1;
-    } 
-    
-    printf("connected to the server..\n"); 
-  
-    /* send test sequences*/
-    write(sockfd, buf_tx, sizeof(buf_tx));     
-    read(sockfd, buf_rx, sizeof(buf_rx));
-    printf("CLIENT:Received: %s \n", buf_rx);
-   
-       
-    /* close the socket */
-    close(sockfd); 
-} 
+	/*
+	* Se lee la informacion enviada por el servidor, que se supone es
+	* una cadena de 6 caracteres.
+	*/
+	Lee_Socket (Socket_Con_Servidor, Cadena, 6);
+
+	/*
+	* Se escribe en pantalla la informacion recibida del servidor
+	*/
+	printf ("Soy cliente, He recibido : %s\n", Cadena);
+
+	/*
+	* Se cierra el socket con el servidor
+	*/
+	close (Socket_Con_Servidor);
+}
